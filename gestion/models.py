@@ -22,7 +22,8 @@ class Proyecto(models.Model):
 
     def clean(self):
         if self.fecha_fin < self.fecha_inicio:
-            raise ValidationError("La fecha de fin no puede ser antes de la fecha de inicio.")
+            # raise ValidationError("La fecha de fin no puede ser antes de la fecha de inicio.")
+            raise ValidationError({'fecha_fin': 'La fecha de fin no puede ser antes de la fecha de inicio.'})
 
     def __str__(self):
         return self.nombre
@@ -51,10 +52,12 @@ class Tarea(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, related_name="tareas")
     empleados = models.ManyToManyField(Empleado, related_name="tareas")
-
+    # empleados = models.ManyToManyField(Empleado, related_name="tareas")
     def clean(self):
         if self.fecha_limite < timezone.now().date():
-            raise ValidationError("La fecha límite no puede ser en el pasado.")
+            # raise ValidationError("La fecha límite no puede ser en el pasado.")
+            raise ValidationError({'fecha_limite': 'La fecha límite no puede ser en el pasado.'})
+        
 
     def __str__(self):
         return self.titulo
